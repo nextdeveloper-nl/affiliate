@@ -37,14 +37,16 @@ class ApplyForAffiliate extends AbstractAction
 
         $account = $this->model;
 
+        // We will add the affiliate role to the user
+        $user = Users::withoutGlobalScope(AuthorizationScope::class)->where('id', $account->iam_user_id)->first();
+
         // We will check if the user has already applied for the affiliate program
-        if ($account->hasRole('affiliate-user')) {
+        if (UserHelper::has('affiliate-user', $user)) {
             $this->setProgress(100, 'The user has already applied for the affiliate program');
             return;
         }
 
-        // We will add the affiliate role to the user
-        $user = Users::withoutGlobalScope(AuthorizationScope::class)->where('id', $account->iam_user_id)->first();
+        //  Check also if the user has affiliation record
 
         //  Create this function so that we can add the user to the affiliate-user role
         RoleHelper::addUserToRole($user, 'affiliate-user');
