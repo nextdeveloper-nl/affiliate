@@ -51,6 +51,7 @@ class ApplyForAffiliate extends AbstractAction
 
         //  Then send the user an email to confirm that they have applied for the affiliate program
 
+
         $iamAccount = Accounts::withoutGlobalScope(AuthorizationScope::class)
             ->where('id', $account->iam_account_id)
             ->first();
