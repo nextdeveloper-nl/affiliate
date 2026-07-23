@@ -22,7 +22,7 @@ class AbstractCustomersTransformer extends AbstractTransformer
     {
                         $affiliateAccountId = \NextDeveloper\Affiliate\Database\Models\Accounts::where('id', $model->affiliate_account_id)->first();
                     $iamAccountId = \NextDeveloper\IAM\Database\Models\Accounts::where('id', $model->iam_account_id)->first();
-        
+
         return $this->buildPayload(
             [
             'id'  =>  $model->uuid,

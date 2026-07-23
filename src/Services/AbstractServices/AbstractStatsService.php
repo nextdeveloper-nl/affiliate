@@ -23,7 +23,7 @@ use NextDeveloper\Events\Services\Events;
  */
 class AbstractStatsService
 {
-    public static function get(StatsQueryFilter $filter = null, array $params = []) : Collection|LengthAwarePaginator
+    public static function get(?StatsQueryFilter $filter = null, array $params = []) : Collection|LengthAwarePaginator
     {
         $enablePaginate = array_key_exists('paginate', $params);
 
@@ -158,7 +158,7 @@ class AbstractStatsService
                 $data['affiliate_account_id']
             );
         }
-                        
+
         try {
             $model = Stats::create($data);
         } catch(\Exception $e) {
@@ -205,7 +205,7 @@ class AbstractStatsService
                 $data['affiliate_account_id']
             );
         }
-    
+
         Events::fire('updating:NextDeveloper\Affiliate\Stats', $model);
 
         try {

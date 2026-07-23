@@ -21,7 +21,7 @@ class AbstractMarketplaceProductsTransformer extends AbstractTransformer
     public function transform(MarketplaceProducts $model)
     {
                         $commonCurrencyId = \NextDeveloper\Commons\Database\Models\Currencies::where('id', $model->common_currency_id)->first();
-        
+
         return $this->buildPayload(
             [
             'id'  =>  $model->uuid,

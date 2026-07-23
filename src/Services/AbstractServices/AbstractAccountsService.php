@@ -23,7 +23,7 @@ use NextDeveloper\Events\Services\Events;
  */
 class AbstractAccountsService
 {
-    public static function get(AccountsQueryFilter $filter = null, array $params = []) : Collection|LengthAwarePaginator
+    public static function get(?AccountsQueryFilter $filter = null, array $params = []) : Collection|LengthAwarePaginator
     {
         $enablePaginate = array_key_exists('paginate', $params);
 
@@ -164,11 +164,11 @@ class AbstractAccountsService
                 $data['iam_account_id']
             );
         }
-            
+
         if(!array_key_exists('iam_account_id', $data)) {
             $data['iam_account_id'] = UserHelper::currentAccount()->id;
         }
-                        
+
         try {
             $model = Accounts::create($data);
         } catch(\Exception $e) {
@@ -221,7 +221,7 @@ class AbstractAccountsService
                 $data['iam_account_id']
             );
         }
-    
+
         Events::fire('updating:NextDeveloper\Affiliate\Accounts', $model);
 
         try {

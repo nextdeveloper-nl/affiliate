@@ -34,7 +34,7 @@ class AffiliateAdminRole extends AbstractRole implements IAuthorizationRole
         // An accountant can see all accounting data
     }
 
-    public function checkPrivileges(Users $users = null)
+    public function checkPrivileges(?Users $users = null)
     {
         //return UserHelper::hasRole(self::NAME, $users);
     }

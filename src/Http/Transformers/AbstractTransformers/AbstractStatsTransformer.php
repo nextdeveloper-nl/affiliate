@@ -21,7 +21,7 @@ class AbstractStatsTransformer extends AbstractTransformer
     public function transform(Stats $model)
     {
                         $affiliateAccountId = \NextDeveloper\Affiliate\Database\Models\Accounts::where('id', $model->affiliate_account_id)->first();
-        
+
         return $this->buildPayload(
             [
             'id'  =>  $model->uuid,

@@ -17,7 +17,7 @@ class MarketplaceProductsQueryFilter extends AbstractQueryFilter
      * @var Builder
      */
     protected $builder;
-    
+
     public function objectType($value)
     {
         return $this->builder->where('object_type', 'like', '%' . $value . '%');

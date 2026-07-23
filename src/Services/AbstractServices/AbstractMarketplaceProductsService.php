@@ -23,7 +23,7 @@ use NextDeveloper\Events\Services\Events;
  */
 class AbstractMarketplaceProductsService
 {
-    public static function get(MarketplaceProductsQueryFilter $filter = null, array $params = []) : Collection|LengthAwarePaginator
+    public static function get(?MarketplaceProductsQueryFilter $filter = null, array $params = []) : Collection|LengthAwarePaginator
     {
         $enablePaginate = array_key_exists('paginate', $params);
 
@@ -158,7 +158,7 @@ class AbstractMarketplaceProductsService
                 $data['common_currency_id']
             );
         }
-                        
+
         try {
             $model = MarketplaceProducts::create($data);
         } catch(\Exception $e) {
@@ -205,7 +205,7 @@ class AbstractMarketplaceProductsService
                 $data['common_currency_id']
             );
         }
-    
+
         Events::fire('updating:NextDeveloper\Affiliate\MarketplaceProducts', $model);
 
         try {
