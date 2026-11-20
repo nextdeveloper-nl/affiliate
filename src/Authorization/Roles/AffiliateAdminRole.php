@@ -31,7 +31,50 @@ class AffiliateAdminRole extends AbstractRole implements IAuthorizationRole
      */
     public function apply(Builder $builder, Model $model)
     {
-        // An accountant can see all accounting data
+        //  This role used to return every affiliate row of every account. It now sees its own affiliate data only.
+        $accountId = UserHelper::currentAccount()->id;
+        $table = $model->getTable();
+
+        //  Plain query builder subquery: the acting account's affiliate accounts, without recursing into the scope.
+        $myAffiliateAccountIds = \Illuminate\Support\Facades\DB::table('affiliate_accounts')
+            ->select('id')
+            ->where('iam_account_id', $accountId);
+
+        if ($table == 'affiliate_accounts') {
+            $builder->where('affiliate_accounts.iam_account_id', $accountId);
+
+            return;
+        }
+
+        //  Customers brought in by my affiliate account(s), plus my own row as a customer.
+        if ($table == 'affiliate_customers') {
+            $builder->where(function (Builder $q) use ($accountId, $myAffiliateAccountIds) {
+                $q->where('affiliate_customers.iam_account_id', $accountId)
+                    ->orWhereIn('affiliate_customers.affiliate_account_id', $myAffiliateAccountIds);
+            });
+
+            return;
+        }
+
+        if ($table == 'affiliate_stats') {
+            $builder->whereIn('affiliate_stats.affiliate_account_id', $myAffiliateAccountIds);
+
+            return;
+        }
+
+        //  The product catalog (commission rates) is shared by every affiliate.
+        if ($table == 'affiliate_marketplace_products') {
+            return;
+        }
+
+        if (\NextDeveloper\Commons\Helpers\DatabaseHelper::isColumnExists($table, 'iam_account_id')) {
+            $builder->where($table . '.iam_account_id', $accountId);
+
+            return;
+        }
+
+        //  Unknown table without an owner column: fail closed.
+        $builder->whereRaw('1 = 0');
     }
 
     public function checkPrivileges(Users $users = null)
